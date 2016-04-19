@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PullRefresh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <script src="js/require.js"></script>
+  <script src="js/require-config.js"></script>
+  <style>
+    html,body{width: 100%; height: 100%; margin: 0; padding: 0;}
+    div{width: 100%; height: 100%; overflow-y: scroll;}
+    li{font-size: 40px;}
+  </style>
+</head>
+<body>
+<div id="test_div">
+  <ul class="test-ul" style="position: relative;">
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+    <li>asdkfjasdgklczxvnzx</li>
+  </ul>
+  </div>
+  <script>
+    require(["zepto","pullload"], function($,pullRefresh) {
+      var refreshObj = new pullRefresh({
+          container:$("#test_div"),
+          el: $(".test-ul"),
+          "clearPullDownMove": function() {
+            console.info("clearPullDownMove")
+          },
+          "canPullDownRefresh": function() {
+            console.info("canPullDownRefresh")
+            $(".test-ul").css({"top":0});
+          },
+          "canPullDownMove": function(data) {
+            // console.info("canPullDownMove")
+            var diff = data[0].touchMoveY - data[0].touchStartY;
+            $(".test-ul").css({"top":diff});
+          }
+        });
+    });
+  </script>
+</body>
+</html>
