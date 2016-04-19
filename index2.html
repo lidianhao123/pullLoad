@@ -72,7 +72,7 @@
           "onPullUpLoad":function(){
             $(".test-ul").css({"top":0});
             $(".pulluptext").text("加载中...");
-            var sTop = document.body.prop("scrollHeight") - document.documentElement.clientHeight;
+            var sTop = document.body.scrollHeight - document.documentElement.clientHeight;
             document.body.scrollTop = sTop;
             showLoading(function(){
               $(".pulluptext").css("display","none");
