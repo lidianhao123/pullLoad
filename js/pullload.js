@@ -24,7 +24,6 @@ define("pullload", ["zepto"], function(zepto) {
       this._cacheDom();
       this._initEvent();
       this.config.isbody = this.config.container[0] === document.body;
-      console.info(this.config.isbody);
     },
     _cacheDom: function() {
       this.el = "string" == typeof this.config.el ? zepto(this.config.el) : this.config.el
@@ -53,8 +52,7 @@ define("pullload", ["zepto"], function(zepto) {
           curY = targetEvent.clientY,
           diffX = curX - startX,
           diffY = curY - startY;
-          console.info(diffY);
-console.info(scrollH, scrollTop,con_H);
+
         //判断垂直移动距离是否大于5 && 横向移动距离小于纵向移动距离
         if(Math.abs(diffY) > 5 && Math.abs(diffY) > Math.abs(diffX)){
           //滚动距离小于设定值 &&回调onPullDownMove 函数，并且回传位置值
