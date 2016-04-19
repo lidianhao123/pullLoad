@@ -34,26 +34,6 @@
       <li class="pulluptext" style="display:none;">松开加载更多</li>
     </ul>
   </div>
-  <div id="loadingToast" class="weui_loading_toast" style="display: none;">
-    <div class="weui_mask_transparent"></div>
-    <div class="weui_toast">
-        <div class="weui_loading">
-            <div class="weui_loading_leaf weui_loading_leaf_0"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_1"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_2"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_3"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_4"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_5"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_6"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_7"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_8"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_9"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_10"></div>
-            <div class="weui_loading_leaf weui_loading_leaf_11"></div>
-        </div>
-        <p class="weui_toast_content">数据加载中</p>
-    </div>
-  </div>
   <script>
     require(["zepto","pullload"], function($,pullRefresh) {
       var startTop;
@@ -68,6 +48,7 @@
           "onPullDownRefresh": function() {
             console.info("canPullDownRefresh")
             $(".test-ul").css({"top":0});
+            $(".pulldowntext").text("加载中...");
             showLoading(function(){
               $(".pulldowntext").css("display","none");
             });
@@ -76,7 +57,7 @@
             // console.info("canPullDownMove")
             var diff = data[0].touchMoveY - data[0].touchStartY;
             $(".test-ul").css({"top":diff});
-            $(".pulldowntext").css("display","block");
+            $(".pulldowntext").text("松开刷新").css("display","block");
           },
           "onPullStart":function(){
             startTop = $(".test-ul").css("top");
@@ -85,10 +66,11 @@
             var diff = data[0].touchMoveY - data[0].touchStartY;
             console.info("onPullUpMove",diff,startTop)
             $(".test-ul").css({"top":diff});
-            $(".pulluptext").css("display","block");
+            $(".pulluptext").text("松开加载更多").css("display","block");
           },
           "onPullUpLoad":function(){
             $(".test-ul").css({"top":0});
+            $(".pulluptext").text("加载中...");
             showLoading(function(){
               $(".pulluptext").css("display","none");
             });
@@ -96,9 +78,7 @@
         });
       //加载数据
       function showLoading(cb){
-        $("#loadingToast").css("display","block");
         setTimeout(function(){
-          $("#loadingToast").css("display","none");
           cb();
         },3000);
       }
