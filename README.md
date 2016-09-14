@@ -6,3 +6,6 @@ http://lidianhao123.github.io/pullLoad/index.html
 
 #Demo2 use text to show loading status
 http://lidianhao123.github.io/pullLoad/index2.html
+
+#Demo3 use text to show loading status
+http://lidianhao123.github.io/pullLoad/index3.html
