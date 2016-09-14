@@ -172,7 +172,7 @@
       this._core.onEnd(startX, startY, scrollTop, scrollH, conH);
     },
     // 拖拽的缓动公式 - easeOutSine
-    easing(distance) {
+    easing:function(distance) {
       // t: current time, b: begInnIng value, c: change In value, d: duration
       var t = distance;
       var b = 0;
