@@ -118,24 +118,30 @@
       this.loaderBody = this.wrapper.querySelector(".tloader-body");
       this.loaderSymbol = this.wrapper.querySelector(".tloader-symbol");
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
-      // var coreOpts = extendArrProps(extendFns, {}, this);
-      var coreOpts = {
-        onPullDownMove: bind(this.onPullDownMove, this),
-        onPullDownRefresh: bind(this.onPullDownRefresh, this),
-        clearPullDownMove: bind(this.clearPullDownMove, this),
-        onPullUpMove: bind(this.onPullUpMove, this),
-        onPullUpLoad: bind(this.onPullUpLoad, this)
-      }
+      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd']), this);
+      var coreOpts = extendArrProps(extendFns, {}, this);
+      // var coreOpts = {
+      //   onPullDownMove: bind(this.onPullDownMove, this),
+      //   onPullDownRefresh: bind(this.onPullDownRefresh, this),
+      //   clearPullDownMove: bind(this.clearPullDownMove, this),
+      //   onPullUpMove: bind(this.onPullUpMove, this),
+      //   onPullUpLoad: bind(this.onPullUpLoad, this)
+      // }
       coreOpts = extendArrProps(extendProps, coreOpts, opts);
       this._core = new pullloadCore(coreOpts);
-      addEvent(this.wrapper, "touchstart", bind(this.onTouchStart, this));
-      addEvent(this.wrapper, "touchmove", bind(this.onTouchMove, this));
-      addEvent(this.wrapper, "touchend", bind(this.onTouchEnd, this));
+      // this.onTouchStart = bind(this.onTouchStart, this)
+      // this.onTouchMove = bind(this.onTouchMove, this)
+      // this.onTouchEnd = bind(this.onTouchEnd, this)
+      addEvent(this.wrapper, "touchstart", this.onTouchStart);
+      addEvent(this.wrapper, "touchmove", this.onTouchMove);
+      addEvent(this.wrapper, "touchend", this.onTouchEnd);
     },
     destory: function(){
+      console.info("----")
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
+      console.info("----")
     },
     onTouchStart: function(event){
       var targetEvent = event.changedTouches[0],
@@ -202,13 +208,16 @@
       this.hasMore = true;
     },
     onPullDownMove: function(startY, y){
+      if(this.loaderState === STATS.refreshing){
+        return false;
+      }
       event.preventDefault();
 
       var diff = y - startY, loaderState;
       if (diff < 0) {
         diff = 0;
       }
-      console.info(startY, y)
+
       diff = this.easing(diff);
       if (diff > 100) {
         loaderState = STATS.enough;
@@ -218,7 +227,10 @@
       this.setChange(diff, loaderState);
     },
     onPullDownRefresh: function(){
-      if (this.loaderState === STATS.pulling) {
+      if(this.loaderState === STATS.refreshing){
+        return false;
+      }
+      else if (this.loaderState === STATS.pulling) {
         this.setEndState();
       } else {
         this.setChange(0, STATS.refreshing);
@@ -238,7 +250,7 @@
     },
     clearPullDownMove: function(){},
     onPullUpMove: function(staartY, y){
-      if(!this.hasMore){
+      if(!this.hasMore || this.loaderState === STATS.loading){
         return false;
       }
       if (typeof this.config.onLoadMore === "function") {
@@ -287,6 +299,7 @@
       obj.addEventListener(type, fn, false);
   }
   function removeEvent(obj, type, fn) {
+    console.info(obj, type, fn)
     if (obj.detachEvent) {
       obj.detachEvent('on' + type, obj[type + fn]);
       obj[type + fn] = null;
@@ -315,18 +328,32 @@
 		var array = args.concat(asArray(arguments, 0));
         return __method.apply(context, array);
     };
-}
+  }
+  /* bindAll 批量绑定
+   * @param fns 待绑定的函数名称
+   * @param obj 待绑定的实例对象
+   * @param context 用于绑定的上下文对象
+   * @describe 如果 context 为 undefined 则context = obj
+  */
+  function bindAll(fns, obj, context){
+    var index = 0, len = fns.length;
+    if(context === undefined){
+      context = obj;
+    }
 
-  // var obj1 = {
-  //  name:1,
-  //  age:12,
-  // }
-  // var obj2 = {
-  //   name:2
-  // }
-  // console.info(extend({},obj2));
-  // console.info(extend(obj1,{}));
-  // console.info(extend(obj1,obj2));
-  // obj1.name = 3
+    for(index; index < len; index++){
+      var key = fns[index];
+      if(typeof obj[key] === 'function'){
+        obj[key] = b(obj[key], context);
+      }
+    }
+    function b(func, context){
+      return function(){
+        return func.apply(context, asArray(arguments, 0));
+      }
+    }
+  }
+
   window.pullload = pullload;
+
 })()
