@@ -1,8 +1,6 @@
-// define("pullload", ["zepto"], function(zepto) {
-
 (function(){
 
-  coreDefaultConfig = {       
+  var coreDefaultConfig = {
     offsetScrollTop: 2,
     offsetY: 75,
     distanceBottom: 100,
@@ -73,7 +71,7 @@
     }
   }
 
-  defaultConfig = {
+  var defaultConfig = {
     container: null,   //具有scroll的容器
     wrapper: null,     //结构外包围元素
     // offsetScrollTop: 2,
@@ -147,7 +145,7 @@
       var targetEvent = event.changedTouches[0],
         startX = targetEvent.clientX,
         startY = targetEvent.clientY;
-      console.info("onTouchStart");
+
       this._core.onStart(startX, startY);
     },
     onTouchMove: function(event){
@@ -172,7 +170,7 @@
       this._core.onEnd(startX, startY, scrollTop, scrollH, conH);
     },
     // 拖拽的缓动公式 - easeOutSine
-    easing(distance) {
+    easing: function(distance) {
       // t: current time, b: begInnIng value, c: change In value, d: duration
       var t = distance;
       var b = 0;
@@ -356,4 +354,4 @@
 
   window.pullload = pullload;
 
-})()
+})();
