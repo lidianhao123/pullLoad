@@ -15,11 +15,11 @@
  */
 //FIS3 官方文档 http://fis.baidu.com/fis3/docs/beginning/intro.html
 //全局属性文档 http://fis.baidu.com/fis3/docs/api/config-props.html
-fis.set('project.ignore', ['printImgNames.js','fis-conf.js','node_modules/**', 'output/**',]);
+fis.set('project.ignore', ['printImgNames.js','fis-conf.js','node_modules/**', 'output/**', 'build/**']);
 
 fis.hook('relative');
 
-//发布到默认的当前路径output下
+//发布到默认的当前路径 build 下
 fis.media("prod")
   .match('::package', {
     spriter: fis.plugin('csssprites')
@@ -38,10 +38,10 @@ fis.media("prod")
   .match('**', {
     relative: true
   })
-  //将代码直接部署至./output下
+  //将代码直接部署至./build 下
   .match('*', {
     deploy: fis.plugin('local-deliver', {
-      to: './output'
+      to: './build'
     })
   });
 
