@@ -59,10 +59,10 @@
           //回调onPullDownRefresh 函数，即满足刷新条件
           this.config.onPullDownRefresh();
         }
-        // else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
-        //   //回调onPullUpLoad 函数，即满足刷新条件
-        //   this.config.onPullUpLoad();
-        // }
+        else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
+          //回调onPullUpLoad 函数，即满足刷新条件
+          this.config.onPullUpLoad();
+        }
         else{
           //回调clearPullDownMove 函数，取消刷新动作
           this.config.clearPullDownMove();
@@ -118,28 +118,17 @@
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
       bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd']), this);
       var coreOpts = extendArrProps(extendFns, {}, this);
-      // var coreOpts = {
-      //   onPullDownMove: bind(this.onPullDownMove, this),
-      //   onPullDownRefresh: bind(this.onPullDownRefresh, this),
-      //   clearPullDownMove: bind(this.clearPullDownMove, this),
-      //   onPullUpMove: bind(this.onPullUpMove, this),
-      //   onPullUpLoad: bind(this.onPullUpLoad, this)
-      // }
+
       coreOpts = extendArrProps(extendProps, coreOpts, opts);
       this._core = new pullloadCore(coreOpts);
-      // this.onTouchStart = bind(this.onTouchStart, this)
-      // this.onTouchMove = bind(this.onTouchMove, this)
-      // this.onTouchEnd = bind(this.onTouchEnd, this)
       addEvent(this.wrapper, "touchstart", this.onTouchStart);
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
       addEvent(this.wrapper, "touchend", this.onTouchEnd);
     },
     destory: function(){
-      console.info("----")
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
-      console.info("----")
     },
     onTouchStart: function(event){
       var targetEvent = event.changedTouches[0],
@@ -166,7 +155,7 @@
         scrollH = this.container.scrollHeight,
         conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
 
-      console.info("onTouchEnd");
+      // console.info("onTouchEnd");
       this._core.onEnd(startX, startY, scrollTop, scrollH, conH);
     },
     // 拖拽的缓动公式 - easeOutSine
@@ -297,7 +286,6 @@
       obj.addEventListener(type, fn, false);
   }
   function removeEvent(obj, type, fn) {
-    console.info(obj, type, fn)
     if (obj.detachEvent) {
       obj.detachEvent('on' + type, obj[type + fn]);
       obj[type + fn] = null;
@@ -353,5 +341,9 @@
   }
 
   window.pullload = pullload;
+  //增加 require 支持
+  if ( typeof define === "function" && define.amd ) {
+    define( "pullload", [], function () { return pullload; });
+  }
 
 })();
