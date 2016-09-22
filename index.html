@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PullRefresh</title>
+  <title>pullload 以 body 为滚动容器</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-  <!--<script src="js/require.js"></script>-->
-  <!--<script src="js/require-config.js"></script>-->
   <style>
-    html,body{/*width: 100%; height: 100%;*/ margin: 0; padding: 0;}
-    /*div{width: 100%; height: 100%; overflow-y: scroll;}*/
+    html,body{margin: 0; padding: 0;}
     li{font-size: 20px; width: 100%;list-style: none;}
     img{width: 100%;}
     div, .test-ul, p{margin: 0; padding: 0;}
@@ -16,39 +13,24 @@
   <link rel="stylesheet" href="css/pullload.less">
 </head>
 <body>
-  <!--<div id="test_div">-->
-    <div id="test_div" class="">
-      <div class="tloader-symbol">
-        <p class="tloader-msg"><i></i></p>
-        <p class="tloader-loading">
-          <i class="ui-loading"></i>
-        </p>
-      </div>
-      <div class="tloader-body">
-        <ul class="test-ul">
-          <!--<li><img src="http://img1.gtimg.com/15/1580/158031/15803178_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803179_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803181_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803182_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803183_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803184_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803186_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803187_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803189_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803190_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803191_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803193_1200x1000_0.jpg" alt=""></li>
-          <li><img src="http://img1.gtimg.com/15/1580/158031/15803194_1200x1000_0.jpg" alt=""></li>-->
-        </ul>
-      </div>
-      <div class="tloader-footer">
-        <p class="tloader-btn"></p>
-        <p class="tloader-loading">
-          <i class="ui-loading"></i>
-        </p>
-      </div>
+  <div id="test_div" class="">
+    <div class="tloader-symbol">
+      <p class="tloader-msg"><i></i></p>
+      <p class="tloader-loading">
+        <i class="ui-loading"></i>
+      </p>
     </div>
-  <!--</div>-->
+    <div class="tloader-body">
+      <ul class="test-ul">
+      </ul>
+    </div>
+    <div class="tloader-footer">
+      <p class="tloader-btn"></p>
+      <p class="tloader-loading">
+        <i class="ui-loading"></i>
+      </p>
+    </div>
+  </div>
   <script src="js/pullload.js"></script>
   <script src="js/zepto.min.js"></script>
   <script>
@@ -82,6 +64,7 @@
     var installObj = new pullload({
       container: document.body,
       wrapper: document.getElementById("test_div"),
+      downEnough: 200,
       onRefresh: function(success,error){
         console.info("实际代码 onRefresh")
         setTimeout(function(){
@@ -100,42 +83,8 @@
           }
         },2000);
       },
-      // offsetScrollTop: 2,
-      // offsetY: 75,
       distanceBottom: 300,
     });
-    // require(["zepto","pullload"], function($,pullRefresh) {
-    //   var startTop;
-    //   var refreshObj = new pullRefresh({
-    //       container:$("body"),
-    //       el: $("#test_div"),
-    //       // container:$("#test_div"),
-    //       // el: $(".test-ul"),
-    //       "clearPullDownMove": function() {
-    //         console.info("clearPullDownMove")
-    //       },
-    //       "onPullDownRefresh": function() {
-    //         console.info("canPullDownRefresh")
-    //         $(".test-ul").css({"top":0});
-    //       },
-    //       "onPullDownMove": function(data) {
-    //         // console.info("canPullDownMove")
-    //         var diff = data[0].touchMoveY - data[0].touchStartY;
-    //         $(".test-ul").css({"top":diff});
-    //       },
-    //       "onPullStart":function(){
-    //         startTop = $(".test-ul").css("top");
-    //       },
-    //       "onPullUpMove":function(data){
-    //         var diff = data[0].touchMoveY - data[0].touchStartY;
-    //         console.info("onPullUpMove",diff,startTop)
-    //         $(".test-ul").css({"top":diff});
-    //       },
-    //       "onPullUpLoad":function(){
-    //         $(".test-ul").css({"top":0});
-    //       }
-    //     });
-    // });
   </script>
 </body>
 </html>
