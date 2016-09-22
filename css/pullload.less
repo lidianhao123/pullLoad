@@ -14,6 +14,7 @@
 @loadingMsg: '正在加载...';
 // @btnLoadMore: '加载更多';
 @btnLoadMore: '没有更多';
+@transition-duration: .2s;
 
 .tloader-msg:after{
     .state-pulling &{
@@ -58,6 +59,15 @@
 	text-align: center;
 	height: @height;
     overflow: hidden;
+
+    // 隐藏刷新提示标签
+    .state- &, .state-reset &{
+        height: 0;
+    }
+    // 延迟至reset完成，隐藏刷新提示标签
+    .state-reset &{
+        transition: height 0s @transition-duration;
+    }
 }
 
 // 拖拽提示信息
@@ -142,7 +152,6 @@
 
 .tloader-body{
     // transform: translate3d(0,0,0);// make over the msg-refreshed
-    @transition-duration: .2s;
 
     .state-refreshing &{
         transform: translate3d(0,@height,0);
