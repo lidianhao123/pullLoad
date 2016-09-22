@@ -1,9 +1,9 @@
 (function(){
 
   var coreDefaultConfig = {
-    offsetScrollTop: 2,
-    offsetY: 75,
-    distanceBottom: 100,
+    offsetScrollTop: 2,  //与顶部的距离
+    // offsetY: 75,         
+    distanceBottom: 100, //距离底部距离触发加载更多
     onPullDownMove:function(){},
     onPullDownRefresh:function(){},
     clearPullDownMove:function(){},
@@ -74,9 +74,7 @@
   var defaultConfig = {
     container: null,   //具有scroll的容器
     wrapper: null,     //结构外包围元素
-    // offsetScrollTop: 2,
-    // offsetY: 75,
-    // distanceBottom: 30,
+    downEnough: 100,   //下拉满足刷新的距离
     onRefresh: function(){},
     onLoadMore: function(){}
   }
@@ -109,17 +107,22 @@
     loaderState: STATS.init,
     hasMore: true,    //是否有加载更多
     init: function(opts){
-      this.config.onRefresh = opts.onRefresh || function(){};
-      this.config.onLoadMore = opts.onLoadMore || function(){};
+      this.config.onRefresh = opts.onRefresh || defaultConfig.onRefresh;
+      this.config.onLoadMore = opts.onLoadMore || defaultConfig.onLoadMore;
+      this.config.downEnough = opts.downEnough || defaultConfig.downEnough;
       this.container = opts.container;
       this.wrapper = opts.wrapper;
+
       this.loaderBody = this.wrapper.querySelector(".tloader-body");
       this.loaderSymbol = this.wrapper.querySelector(".tloader-symbol");
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
-      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd']), this);
-      var coreOpts = extendArrProps(extendFns, {}, this);
 
+      //将 extendFns 数组所列函数 及 'onTouchStart','onTouchMove','onTouchEnd' 进行 this 绑定。
+      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd']), this);
+      //创建参数对象把 extendFns 设置成参数，同时把 opts 传递进来的参数整合上。
+      var coreOpts = extendArrProps(extendFns, {}, this);
       coreOpts = extendArrProps(extendProps, coreOpts, opts);
+
       this._core = new pullloadCore(coreOpts);
       addEvent(this.wrapper, "touchstart", this.onTouchStart);
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
@@ -129,6 +132,15 @@
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
+      this.config = {};
+      this.container = null;   //具有scroll的容器
+      this.wrapper = null;     //结构外包围元素
+      this.loaderBody = null;  //DOM 对象
+      this.loaderSymbol = null; //DOM 对象
+      this.loaderBtn = null;    //DOM 对象
+      this._core = null;       //pullloadCore 实例
+      this.loaderState = STATS.init;
+      this.hasMore = true;    //是否有加载更多
     },
     onTouchStart: function(event){
       var targetEvent = event.changedTouches[0],
@@ -155,7 +167,6 @@
         scrollH = this.container.scrollHeight,
         conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
 
-      // console.info("onTouchEnd");
       this._core.onEnd(startX, startY, scrollTop, scrollH, conH);
     },
     // 拖拽的缓动公式 - easeOutSine
@@ -172,17 +183,19 @@
       var lbodyTop = pullHeight !== 0 ? 'translate3d(0, ' + pullHeight + 'px, 0)' : "",
         symbolTop = pullHeight - 50 > 0 ? pullHeight - 50 : 0;
         lSymbol = symbolTop !== 0 ? 'translate3d(0, ' + symbolTop + 'px, 0)' : "";
-      // console.info(lbodyTop)
+
       this.setClassName(state);
       this.loaderBody.style.WebkitTransform = lbodyTop;
       this.loaderBody.style.transform = lbodyTop;
       this.loaderSymbol.style.WebkitTransform = lSymbol;
       this.loaderSymbol.style.transform = lSymbol;
     },
+    //设置 wrapper DOM class 值
     setClassName: function(state){
       this.loaderState = state;
       this.wrapper.className = 'tloader state-' + state;
     },
+    //设置动作结束状态
     setEndState: function(){
       this.setChange(0, STATS.reset);
     },
@@ -206,7 +219,7 @@
       }
 
       diff = this.easing(diff);
-      if (diff > 100) {
+      if (diff > this.config.downEnough) {
         loaderState = STATS.enough;
       } else {
         loaderState = STATS.pulling;
