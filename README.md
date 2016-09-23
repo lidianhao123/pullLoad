@@ -19,7 +19,8 @@ http://lidianhao123.github.io/pullLoad/
 6. 所有功能点已扩展的形式进行开发互不影响 TODO
 
 # 使用说明
-1. 添加固定 DOM 结构模板
+添加固定 DOM 结构模板
+
 ```html
   <!-- 最外层包裹 DIV 的 class 会被重置 建议使用 id 进行配置 -->
   <div id="test_div" class="">
@@ -41,7 +42,8 @@ http://lidianhao123.github.io/pullLoad/
   </div>
 ```
 
-2. 添加 Javascript 文件
+添加 Javascript 文件
+
 ```html
 <script src="js/pullload.js"></script>
 ```
@@ -50,7 +52,7 @@ http://lidianhao123.github.io/pullLoad/
 require(["zepto", "pullload"], function($, pullload) {})
 ```
 
-3. 创建 pullload 对象
+创建 pullload 对象
 
 此示例代码为 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 中部分代码节选，详情可直接参考 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 
 ```js
