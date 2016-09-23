@@ -12,13 +12,17 @@
   }
 
   var pullloadCore = function(opts) {
-    this.startX = 0; //用于保存touchstart时初始位置
-    this.startY = 0;//用于保存touchstart时初始位置
-    this.config = null;//配置信息
     this.init(opts);
   };
 
   pullloadCore.prototype = {
+    //用于保存touchstart时初始位置
+    startX: 0,
+    //用于保存touchstart时初始位置
+    startY: 0,
+    //配置信息
+    config: null,
+
     init: function(opts){
       this.config = extend(coreDefaultConfig, opts || {});
     },
@@ -89,19 +93,19 @@
   };
 
   var pullload = function(opts){
-    this.config = {};
-    this.container = null;   //具有scroll的容器
-    this.wrapper = null;     //结构外包围元素
-    this.loaderBody = null;  //DOM 对象
-    this.loaderSymbol = null; //DOM 对象
-    this.loaderBtn = null;    //DOM 对象
-    this._core = null;       //pullloadCore 实例
-    this.loaderState = STATS.init;
-    this.hasMore = true;    //是否有加载更多
     this.init(opts);
   }
 
   pullload.prototype = {
+    config: {},
+    container: null,   //具有scroll的容器
+    wrapper: null,     //结构外包围元素
+    loaderBody: null,  //DOM 对象
+    loaderSymbol: null, //DOM 对象
+    loaderBtn: null,    //DOM 对象
+    _core: null,       //pullloadCore 实例
+    loaderState: STATS.init,
+    hasMore: true,    //是否有加载更多
     init: function(opts){
       this.config.onRefresh = opts.onRefresh || defaultConfig.onRefresh;
       this.config.onLoadMore = opts.onLoadMore || defaultConfig.onLoadMore;
@@ -124,6 +128,7 @@
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
       addEvent(this.wrapper, "touchend", this.onTouchEnd);
       addEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
+      console.info("11==")
     },
     destory: function(){
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
