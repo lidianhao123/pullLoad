@@ -19,7 +19,7 @@ http://lidianhao123.github.io/pullLoad/
 6. 所有功能点已扩展的形式进行开发互不影响 TODO
 
 # 使用说明
-添加固定 DOM 结构模板
+#### 添加固定 DOM 结构模板
 
 ```html
   <!-- 最外层包裹 DIV 的 class 会被重置 建议使用 id 进行配置 -->
@@ -42,7 +42,7 @@ http://lidianhao123.github.io/pullLoad/
   </div>
 ```
 
-添加 Javascript 文件
+#### 添加 Javascript 文件
 
 ```html
 <script src="js/pullload.js"></script>
@@ -52,7 +52,7 @@ http://lidianhao123.github.io/pullLoad/
 require(["zepto", "pullload"], function($, pullload) {})
 ```
 
-创建 pullload 对象
+#### 创建 pullload 对象
 
 此示例代码为 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 中部分代码节选，详情可直接参考 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 
 ```js
@@ -87,9 +87,9 @@ require(["zepto", "pullload"], function($, pullload) {})
 ```
 
 # 参数说明：
-1. container  可以是 body 或者固定高度的 DOM 块级元素作为外部容器
-2. wrapper    必须是上述 id="test_div" 元素
-3. downEnough 下拉满足刷新的距离 默认值为100像素
-4. distanceBottom 距离底部距离触发加载更多 默认值为100像素 
-5. onRefresh  满足刷新动作回调函数，刷新的具体业务代码在此函数中进行，并且需要 success 或者 error
-6. onLoadMore 满足加载更多回调函数，加载更多聚义业务代码在此函数中进行，并且需要 success 或者 error。无更多内容时请执行success(true);
+- container  可以是 body 或者固定高度的 DOM 块级元素作为外部容器
+- wrapper    必须是上述 id="test_div" 元素
+- downEnough 下拉满足刷新的距离 默认值为100像素
+- distanceBottom 距离底部距离触发加载更多 默认值为100像素 
+- onRefresh  满足刷新动作回调函数，刷新的具体业务代码在此函数中进行，并且需要 success 或者 error
+- onLoadMore 满足加载更多回调函数，加载更多聚义业务代码在此函数中进行，并且需要 success 或者 error。无更多内容时请执行success(true);
