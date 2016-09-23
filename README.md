@@ -1,6 +1,7 @@
 # pullLoad
-Moblie html5 plugin for pull down refresh and pull up load more. Depend Zepto.js and require.js.
+移动端 html5 插件，实现下拉刷新，加载更多等功能，支持require.js
 
+#### 示例
 http://lidianhao123.github.io/pullLoad/
 
 # 基本思路
