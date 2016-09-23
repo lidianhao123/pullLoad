@@ -10,7 +10,7 @@
     html,body{ margin: 0; padding: 0; width: 100%; height: 100%;}
     li{font-size: 20px; width: 100%;list-style: none;}
     img{width: 100%;}
-    #test_div{position: absolute; width: 100%; height: 100%; overflow-y: scroll;}
+    #test_div{position: absolute; width: 100%; height: 100%; overflow-y: scroll;-webkit-overflow-scrolling:touch;}
     div, .test-ul, p{margin: 0; padding: 0;}
   </style>
   <link rel="stylesheet" href="css/pullload.less">
@@ -66,7 +66,7 @@
       var installObj = new pullload({
         container: document.getElementById("test_div"),
         wrapper: document.getElementById("test_div"),
-        downEnough: 200,
+        downEnough: 100,
         onRefresh: function(success,error){
           console.info("实际代码 onRefresh")
           setTimeout(function(){
@@ -85,7 +85,7 @@
             }
           },2000);
         },
-        distanceBottom: 300,
+      distanceBottom: 150,
       });
     });
   </script>

@@ -118,7 +118,7 @@
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
 
       //将 extendFns 数组所列函数 及 'onTouchStart','onTouchMove','onTouchEnd' 进行 this 绑定。
-      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd']), this);
+      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd','onScroll']), this);
       //创建参数对象把 extendFns 设置成参数，同时把 opts 传递进来的参数整合上。
       var coreOpts = extendArrProps(extendFns, {}, this);
       coreOpts = extendArrProps(extendProps, coreOpts, opts);
@@ -127,11 +127,13 @@
       addEvent(this.wrapper, "touchstart", this.onTouchStart);
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
       addEvent(this.wrapper, "touchend", this.onTouchEnd);
+      addEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
     },
     destory: function(){
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
+      removeEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
       this.config = {};
       this.container = null;   //具有scroll的容器
       this.wrapper = null;     //结构外包围元素
@@ -263,6 +265,30 @@
           }
         }, this));
       }
+    },
+    onScroll: function(event){
+      // console.info("111");
+      // var scrollTop = this.container.scrollTop,
+      //   scrollH = this.container.scrollHeight,
+      //   conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
+      
+      // if(!this.hasMore || this.loaderState === STATS.loading){
+      //   return false;
+      // }
+      // // if((scrollH - scrollTop) < conH){
+      // //   this.setChange(0, STATS.loading);
+      // // }
+      // console.info(scrollH, scrollTop, conH)
+      // if ((scrollH - scrollTop - conH) < conH && typeof this.config.onLoadMore === "function") {
+      //   // console.info(this.state);
+      //   this.setChange(0, STATS.loading);
+      //   this.config.onLoadMore(bind(function(isNoMore){
+      //     this.setEndState();
+      //     if(isNoMore){
+      //       this.setNoMoreState();
+      //     }
+      //   }, this));
+      // }
     },
     onPullUpLoad: function(){}
   }

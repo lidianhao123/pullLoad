@@ -60,28 +60,31 @@
       }
       return html;
     }
-    $(".test-ul").html(createAll(data));
+    // $(".test-ul").html(createAll(data));
+    $(".test-ul").append(createLi(data[0]));
     var installObj = new pullload({
       container: document.body,
       wrapper: document.getElementById("test_div"),
-      downEnough: 200,
+      downEnough: 100,
       onRefresh: function(success,error){
         console.info("实际代码 onRefresh")
         setTimeout(function(){
-          $(".test-ul").html(createAll(data));
+          // $(".test-ul").html(createAll(data));
+          $(".test-ul").append(createLi(data[0]));
           success();
         },2000);
       },
       onLoadMore: function(success, error){
         console.info("实际代码 onLoadMore")
         setTimeout(function(){
-          $(".test-ul").append(createLi(data[loadMoreIndex]));
-          if(--loadMoreIndex){
+          // $(".test-ul").append(createLi(data[loadMoreIndex]));
+          $(".test-ul").append(createLi(data[0]));
+          // if(--loadMoreIndex){
             success(false);
-          } else{
-            success(true);
-          }
-        },2000);
+          // } else{
+          //   success(true);
+          // }
+        },500);
       },
       distanceBottom: 300,
     });
