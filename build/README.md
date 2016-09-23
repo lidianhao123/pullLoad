@@ -11,7 +11,7 @@ http://lidianhao123.github.io/pullLoad/
 5. 触摸事件绑定在内容块 content（即高度为 auto 的DOM ）
 
 # 功能点
-1. 下拉刷新更多
+1. 下拉刷新
 2. 滚动到距底部距离小于阈值加载更多
 3. 上拉加载更多
 4. 通过复写 css 实现自定义样式

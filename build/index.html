@@ -31,6 +31,24 @@
       </p>
     </div>
   </div>
+  <div id="test_div2" class="">
+    <div class="tloader-symbol">
+      <p class="tloader-msg"><i></i></p>
+      <p class="tloader-loading">
+        <i class="ui-loading"></i>
+      </p>
+    </div>
+    <div class="tloader-body">
+      <ul class="test-ul">
+      </ul>
+    </div>
+    <div class="tloader-footer">
+      <p class="tloader-btn"></p>
+      <p class="tloader-loading">
+        <i class="ui-loading"></i>
+      </p>
+    </div>
+  </div>
   <script src="js/pullload.js"></script>
   <script src="js/zepto.min.js"></script>
   <script>
@@ -61,7 +79,7 @@
       return html;
     }
     // $(".test-ul").html(createAll(data));
-    $(".test-ul").append(createLi(data[0]));
+    $("#test_div .test-ul").append(createLi(data[0]));
     var installObj = new pullload({
       container: document.body,
       wrapper: document.getElementById("test_div"),
@@ -70,7 +88,7 @@
         console.info("实际代码 onRefresh")
         setTimeout(function(){
           // $(".test-ul").html(createAll(data));
-          $(".test-ul").append(createLi(data[0]));
+          $("#test_div .test-ul").append(createLi(data[0]));
           success();
         },2000);
       },
@@ -78,7 +96,34 @@
         console.info("实际代码 onLoadMore")
         setTimeout(function(){
           // $(".test-ul").append(createLi(data[loadMoreIndex]));
-          $(".test-ul").append(createLi(data[0]));
+          $("#test_div .test-ul").append(createLi(data[0]));
+          // if(--loadMoreIndex){
+            success(false);
+          // } else{
+          //   success(true);
+          // }
+        },500);
+      },
+      distanceBottom: 300,
+    });
+    $("#test_div2 .test-ul").append(createLi(data[0]));
+    var installObj2 = new pullload({
+      container: document.body,
+      wrapper: document.getElementById("test_div2"),
+      downEnough: 100,
+      onRefresh: function(success,error){
+        console.info("实际代码 onRefresh")
+        setTimeout(function(){
+          // $(".test-ul").html(createAll(data));
+          $("#test_div2 .test-ul").append(createLi(data[0]));
+          success();
+        },2000);
+      },
+      onLoadMore: function(success, error){
+        console.info("实际代码 onLoadMore")
+        setTimeout(function(){
+          // $(".test-ul").append(createLi(data[loadMoreIndex]));
+          $("#test_div2 .test-ul").append(createLi(data[0]));
           // if(--loadMoreIndex){
             success(false);
           // } else{
