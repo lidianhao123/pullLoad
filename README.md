@@ -84,10 +84,10 @@ require(["zepto", "pullload"], function($, pullload) {})
     });
 ```
 
-      参数说明：
-      1. container  可以是 body 或者固定高度的 DOM 块级元素作为外部容器
-      2. wrapper    必须是上述 id="test_div" 元素
-      3. downEnough 下拉满足刷新的距离 默认值为100像素
-      4. distanceBottom 距离底部距离触发加载更多 默认值为100像素 
-      5. onRefresh  满足刷新动作回调函数，刷新的具体业务代码在此函数中进行，并且需要 success 或者 error
-      6. onLoadMore 满足加载更多回调函数，加载更多聚义业务代码在此函数中进行，并且需要 success 或者 error。无更多内容时请执行success(true);
+# 参数说明：
+1. container  可以是 body 或者固定高度的 DOM 块级元素作为外部容器
+2. wrapper    必须是上述 id="test_div" 元素
+3. downEnough 下拉满足刷新的距离 默认值为100像素
+4. distanceBottom 距离底部距离触发加载更多 默认值为100像素 
+5. onRefresh  满足刷新动作回调函数，刷新的具体业务代码在此函数中进行，并且需要 success 或者 error
+6. onLoadMore 满足加载更多回调函数，加载更多聚义业务代码在此函数中进行，并且需要 success 或者 error。无更多内容时请执行success(true);
