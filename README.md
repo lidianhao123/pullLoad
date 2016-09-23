@@ -23,24 +23,24 @@ http://lidianhao123.github.io/pullLoad/
 #### 添加固定 DOM 结构模板
 
 ```html
-  <!-- 最外层包裹 DIV 的 class 会被重置 建议使用 id 进行配置 -->
-  <div id="test_div" class="">
-    <div class="tloader-symbol">
-      <p class="tloader-msg"><i></i></p>
-      <p class="tloader-loading">
-        <i class="ui-loading"></i>
-      </p>
-    </div>
-    <div class="tloader-body">
-      <!-- 此处添加具体内容 -->
-    </div>
-    <div class="tloader-footer">
-      <p class="tloader-btn"></p>
-      <p class="tloader-loading">
-        <i class="ui-loading"></i>
-      </p>
-    </div>
+<!-- 最外层包裹 DIV 的 class 会被重置 建议使用 id 进行配置 -->
+<div id="test_div" class="">
+  <div class="tloader-symbol">
+    <p class="tloader-msg"><i></i></p>
+    <p class="tloader-loading">
+      <i class="ui-loading"></i>
+    </p>
   </div>
+  <div class="tloader-body">
+    <!-- 此处添加具体内容 -->
+  </div>
+  <div class="tloader-footer">
+    <p class="tloader-btn"></p>
+    <p class="tloader-loading">
+      <i class="ui-loading"></i>
+    </p>
+  </div>
+</div>
 ```
 
 #### 添加 Javascript 文件
@@ -57,34 +57,34 @@ require(["zepto", "pullload"], function($, pullload) {})
 
 此示例代码为 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 中部分代码节选，详情可直接参考 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 
 ```js
-    var installObj = new pullload({
-      container: document.body,
-      wrapper: document.getElementById("test_div"),
-      downEnough: 100,
-      distanceBottom: 300,
-      // onRefresh 有两个回调函数，二者必须调用一个
-      onRefresh: function(success,error){
-        console.info("实际代码 onRefresh")
-        setTimeout(function(){
-          $(".test-ul").html(createAll(data));
-          success();  //完成刷新调用
-        },2000);
-        //error();    //异常调用
-      },
-      // onLoadMore 有两个回调函数，二者必须调用一个
-      onLoadMore: function(success, error){
-        console.info("实际代码 onLoadMore")
-        setTimeout(function(){
-          $(".test-ul").append(createLi(data[loadMoreIndex]));
-          // if(--loadMoreIndex){
-            success(false);    //加载动作完成
-          // } else{
-          //   success(true);  //加载动作完成 并且传递 true 参数通知组件无更多内容
-          // }
-        },500);
-        //error();             //单词请求异常调用
-      },
-    });
+var installObj = new pullload({
+  container: document.body,
+  wrapper: document.getElementById("test_div"),
+  downEnough: 100,
+  distanceBottom: 300,
+  // onRefresh 有两个回调函数，二者必须调用一个
+  onRefresh: function(success,error){
+    console.info("实际代码 onRefresh")
+    setTimeout(function(){
+      $(".test-ul").html(createAll(data));
+      success();  //完成刷新调用
+    },2000);
+    //error();    //异常调用
+  },
+  // onLoadMore 有两个回调函数，二者必须调用一个
+  onLoadMore: function(success, error){
+    console.info("实际代码 onLoadMore")
+    setTimeout(function(){
+      $(".test-ul").append(createLi(data[loadMoreIndex]));
+      // if(--loadMoreIndex){
+        success(false);    //加载动作完成
+      // } else{
+      //   success(true);  //加载动作完成 并且传递 true 参数通知组件无更多内容
+      // }
+    },500);
+    //error();             //单词请求异常调用
+  },
+});
 ```
 
 # 参数说明：
