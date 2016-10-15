@@ -1,81 +1,14 @@
 (function(){
 
-  var coreDefaultConfig = {
-    offsetScrollTop: 2,  //与顶部的距离
-    // offsetY: 75,         
-    distanceBottom: 100, //距离底部距离触发加载更多
-    onPullDownMove:function(){},
-    onPullDownRefresh:function(){},
-    clearPullDownMove:function(){},
-    onPullUpMove:function(){},
-    onPullUpLoad:function(){}
-  }
-
-  var pullloadCore = function(opts) {
-    this.startX = 0; //用于保存touchstart时初始位置
-    this.startY = 0;//用于保存touchstart时初始位置
-    this.config = null;//配置信息
-    this.init(opts);
-  };
-
-  pullloadCore.prototype = {
-    init: function(opts){
-      this.config = extend(coreDefaultConfig, opts || {});
-    },
-    onStart: function(x, y){
-      this.startX = x;
-      this.startY = y;
-    },
-    onMove: function(x, y, scrollTop, scrollH, conH){
-      var diffX = x - this.startX,
-        diffY = y - this.startY;
-
-      //判断垂直移动距离是否大于5 && 横向移动距离小于纵向移动距离
-      if(Math.abs(diffY) > 5 && Math.abs(diffY) > Math.abs(diffX)){
-        //滚动距离小于设定值 &&回调onPullDownMove 函数，并且回传位置值
-        if(diffY > 5 && scrollTop < this.config.offsetScrollTop ){
-          // //阻止执行浏览器默认动作
-          // event.preventDefault();
-          this.config.onPullDownMove(this.startY, y);
-        } //滚动距离距离底部小于设定值
-        else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
-          //阻止执行浏览器默认动作
-          // event.preventDefault();
-          this.config.onPullUpMove(this.startY, y);
-        }
-      }
-    },
-    onEnd: function(x, y, scrollTop, scrollH, conH){
-       var diffX = x - this.startX,
-        diffY = y - this.startY;
-
-      //判断垂直移动距离是否大于5 && 横向移动距离小于纵向移动距离
-      if(Math.abs(diffY) > 5 && Math.abs(diffY) > Math.abs(diffX)){
-        if(diffY > 5 && scrollTop < this.config.offsetScrollTop ){
-          //回调onPullDownRefresh 函数，即满足刷新条件
-          this.config.onPullDownRefresh();
-        }
-        else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
-          //回调onPullUpLoad 函数，即满足刷新条件
-          this.config.onPullUpLoad();
-        }
-        else{
-          //回调clearPullDownMove 函数，取消刷新动作
-          this.config.clearPullDownMove();
-        }
-      }
-    }
-  }
-
   var defaultConfig = {
     container: null,   //具有scroll的容器
     wrapper: null,     //结构外包围元素
     downEnough: 100,   //下拉满足刷新的距离
+    offsetScrollTop: 2,  //与顶部的距离     
+    distanceBottom: 100, //距离底部距离触发加载更多
     onRefresh: function(){},
     onLoadMore: function(){}
   }
-  extendFns = ["onPullDownMove", "onPullDownRefresh", "clearPullDownMove", "onPullUpMove", "onPullUpLoad"];
-  extendProps = ["offsetScrollTop", "offsetY", "distanceBottom"];
 
   var STATS = {
     init: '',
@@ -84,7 +17,6 @@
     refreshing: 'refreshing',
     refreshed: 'refreshed',
     reset: 'reset',
-
     loading: 'loading' // loading more
   };
 
@@ -95,17 +27,17 @@
     this.loaderBody = null;  //DOM 对象
     this.loaderSymbol = null; //DOM 对象
     this.loaderBtn = null;    //DOM 对象
-    this._core = null;       //pullloadCore 实例
     this.loaderState = STATS.init;
     this.hasMore = true;    //是否有加载更多
+    this.startX = 0; //用于保存touchstart时初始位置
+    this.startY = 0;//用于保存touchstart时初始位置
     this.init(opts);
   }
 
   pullload.prototype = {
     init: function(opts){
-      this.config.onRefresh = opts.onRefresh || defaultConfig.onRefresh;
-      this.config.onLoadMore = opts.onLoadMore || defaultConfig.onLoadMore;
-      this.config.downEnough = opts.downEnough || defaultConfig.downEnough;
+      this.config = extend(defaultConfig, opts || {});
+
       this.container = opts.container;
       this.wrapper = opts.wrapper;
 
@@ -113,97 +45,75 @@
       this.loaderSymbol = this.wrapper.querySelector(".tloader-symbol");
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
 
-      //将 extendFns 数组所列函数 及 'onTouchStart','onTouchMove','onTouchEnd' 进行 this 绑定。
-      bindAll(extendFns.concat(['onTouchStart','onTouchMove','onTouchEnd','onScroll']), this);
-      //创建参数对象把 extendFns 设置成参数，同时把 opts 传递进来的参数整合上。
-      var coreOpts = extendArrProps(extendFns, {}, this);
-      coreOpts = extendArrProps(extendProps, coreOpts, opts);
+      //将函数 'onTouchStart','onTouchMove','onTouchEnd' 进行 this 绑定。
+      bindAll(['onTouchStart','onTouchMove','onTouchEnd'], this);
 
-      this._core = new pullloadCore(coreOpts);
       addEvent(this.wrapper, "touchstart", this.onTouchStart);
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
       addEvent(this.wrapper, "touchend", this.onTouchEnd);
-      addEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
     },
     destory: function(){
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
-      removeEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
       this.config = {};
       this.container = null;   //具有scroll的容器
       this.wrapper = null;     //结构外包围元素
       this.loaderBody = null;  //DOM 对象
       this.loaderSymbol = null; //DOM 对象
       this.loaderBtn = null;    //DOM 对象
-      this._core = null;       //pullloadCore 实例
       this.loaderState = STATS.init;
       this.hasMore = true;    //是否有加载更多
+      this.startX = 0; //用于保存touchstart时初始位置
+      this.startY = 0;//用于保存touchstart时初始位置
     },
     onTouchStart: function(event){
-      var targetEvent = event.changedTouches[0],
-        startX = targetEvent.clientX,
-        startY = targetEvent.clientY;
-
-      this._core.onStart(startX, startY);
+      var targetEvent = event.changedTouches[0];
+      this.startX = targetEvent.clientX;
+      this.startY = targetEvent.clientY;
     },
     onTouchMove: function(event){
       var targetEvent = event.changedTouches[0],
-        startX = targetEvent.clientX,
-        startY = targetEvent.clientY,
+        x = targetEvent.clientX,
+        y = targetEvent.clientY,
         scrollTop = this.container.scrollTop,
         scrollH = this.container.scrollHeight,
         conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
+        diffX = x - this.startX,
+        diffY = y - this.startY;
 
-      this._core.onMove(startX, startY, scrollTop, scrollH, conH);
+      //判断垂直移动距离是否大于5 && 横向移动距离小于纵向移动距离
+      if(Math.abs(diffY) > 5 && Math.abs(diffY) > Math.abs(diffX)){
+        //滚动距离小于设定值 &&回调onPullDownMove 函数，并且回传位置值
+        if(diffY > 5 && scrollTop < this.config.offsetScrollTop ){
+          // //阻止执行浏览器默认动作
+          // event.preventDefault();
+          this.onPullDownMove(this.startY, y);
+        } //滚动距离距离底部小于设定值
+        else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
+          //阻止执行浏览器默认动作
+          // event.preventDefault();
+          this.onPullUpMove(this.startY, y);
+        }
+      }
     },
     onTouchEnd: function(event){
       var targetEvent = event.changedTouches[0],
-        startX = targetEvent.clientX,
-        startY = targetEvent.clientY,
+        x = targetEvent.clientX,
+        y = targetEvent.clientY,
         scrollTop = this.container.scrollTop,
         scrollH = this.container.scrollHeight,
         conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
+        diffX = x - this.startX,
+        diffY = y - this.startY;
 
-      this._core.onEnd(startX, startY, scrollTop, scrollH, conH);
-    },
-    // 拖拽的缓动公式 - easeOutSine
-    easing: function(distance) {
-      // t: current time, b: begInnIng value, c: change In value, d: duration
-      var t = distance;
-      var b = 0;
-      var d = screen.availHeight; // 允许拖拽的最大距离
-      var c = d / 2.5; // 提示标签最大有效拖拽距离
-
-      return c * Math.sin(t / d * (Math.PI / 2)) + b;
-    },
-    setChange: function(pullHeight, state){
-      var lbodyTop = pullHeight !== 0 ? 'translate3d(0, ' + pullHeight + 'px, 0)' : "",
-        symbolTop = pullHeight - 50 > 0 ? pullHeight - 50 : 0;
-        lSymbol = symbolTop !== 0 ? 'translate3d(0, ' + symbolTop + 'px, 0)' : "";
-
-      this.setClassName(state);
-      this.loaderBody.style.WebkitTransform = lbodyTop;
-      this.loaderBody.style.transform = lbodyTop;
-      this.loaderSymbol.style.WebkitTransform = lSymbol;
-      this.loaderSymbol.style.transform = lSymbol;
-    },
-    //设置 wrapper DOM class 值
-    setClassName: function(state){
-      this.loaderState = state;
-      this.wrapper.className = 'tloader state-' + state;
-    },
-    //设置动作结束状态
-    setEndState: function(){
-      this.setChange(0, STATS.reset);
-    },
-    setNoMoreState:function(){
-      this.loaderBtn.style.display = "block";
-      this.hasMore = false;
-    },
-    resetLoadMore: function(){
-      this.loaderBtn.style.display = "none";
-      this.hasMore = true;
+      //判断垂直移动距离是否大于5 && 横向移动距离小于纵向移动距离
+      if(Math.abs(diffY) > 5 && Math.abs(diffY) > Math.abs(diffX)){
+        if(diffY > 5 && scrollTop < this.config.offsetScrollTop ){
+          //回调onPullDownRefresh 函数，即满足刷新条件
+          this.onPullDownRefresh();
+        }
+      }
     },
     onPullDownMove: function(startY, y){
       if(this.loaderState === STATS.refreshing){
@@ -246,7 +156,6 @@
         }
       }
     },
-    clearPullDownMove: function(){},
     onPullUpMove: function(staartY, y){
       if(!this.hasMore || this.loaderState === STATS.loading){
         return false;
@@ -262,31 +171,44 @@
         }, this));
       }
     },
-    onScroll: function(event){
-      // console.info("111");
-      // var scrollTop = this.container.scrollTop,
-      //   scrollH = this.container.scrollHeight,
-      //   conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
-      
-      // if(!this.hasMore || this.loaderState === STATS.loading){
-      //   return false;
-      // }
-      // // if((scrollH - scrollTop) < conH){
-      // //   this.setChange(0, STATS.loading);
-      // // }
-      // console.info(scrollH, scrollTop, conH)
-      // if ((scrollH - scrollTop - conH) < conH && typeof this.config.onLoadMore === "function") {
-      //   // console.info(this.state);
-      //   this.setChange(0, STATS.loading);
-      //   this.config.onLoadMore(bind(function(isNoMore){
-      //     this.setEndState();
-      //     if(isNoMore){
-      //       this.setNoMoreState();
-      //     }
-      //   }, this));
-      // }
+    // 拖拽的缓动公式 - easeOutSine
+    easing: function(distance) {
+      // t: current time, b: begInnIng value, c: change In value, d: duration
+      var t = distance;
+      var b = 0;
+      var d = screen.availHeight; // 允许拖拽的最大距离
+      var c = d / 2.5; // 提示标签最大有效拖拽距离
+
+      return c * Math.sin(t / d * (Math.PI / 2)) + b;
     },
-    onPullUpLoad: function(){}
+    setChange: function(pullHeight, state){
+      var lbodyTop = pullHeight !== 0 ? 'translate3d(0, ' + pullHeight + 'px, 0)' : "",
+        symbolTop = pullHeight - 50 > 0 ? pullHeight - 50 : 0;
+        lSymbol = symbolTop !== 0 ? 'translate3d(0, ' + symbolTop + 'px, 0)' : "";
+
+      this.setClassName(state);
+      this.loaderBody.style.WebkitTransform = lbodyTop;
+      this.loaderBody.style.transform = lbodyTop;
+      this.loaderSymbol.style.WebkitTransform = lSymbol;
+      this.loaderSymbol.style.transform = lSymbol;
+    },
+    //设置 wrapper DOM class 值
+    setClassName: function(state){
+      this.loaderState = state;
+      this.wrapper.className = 'tloader state-' + state;
+    },
+    //设置动作结束状态
+    setEndState: function(){
+      this.setChange(0, STATS.reset);
+    },
+    setNoMoreState:function(){
+      this.loaderBtn.style.display = "block";
+      this.hasMore = false;
+    },
+    resetLoadMore: function(){
+      this.loaderBtn.style.display = "none";
+      this.hasMore = true;
+    }
   }
 
   function extendArrProps(arr, obj1, obj2){
