@@ -46,18 +46,16 @@
       this.loaderBtn = this.wrapper.querySelector(".tloader-btn");
 
       //将函数 'onTouchStart','onTouchMove','onTouchEnd' 进行 this 绑定。
-      bindAll(['onTouchStart','onTouchMove','onTouchEnd','onScroll'], this);
+      bindAll(['onTouchStart','onTouchMove','onTouchEnd'], this);
 
       addEvent(this.wrapper, "touchstart", this.onTouchStart);
       addEvent(this.wrapper, "touchmove", this.onTouchMove);
       addEvent(this.wrapper, "touchend", this.onTouchEnd);
-      addEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
     },
     destory: function(){
       removeEvent(this.wrapper, "touchstart", this.onTouchStart);
       removeEvent(this.wrapper, "touchmove", this.onTouchMove);
       removeEvent(this.wrapper, "touchend", this.onTouchEnd);
-      removeEvent(this.container === document.body ? window : this.container, "scroll", this.onScroll);
       this.config = {};
       this.container = null;   //具有scroll的容器
       this.wrapper = null;     //结构外包围元素
@@ -115,14 +113,6 @@
           //回调onPullDownRefresh 函数，即满足刷新条件
           this.onPullDownRefresh();
         }
-        // else if(diffY < 0 && (scrollH - scrollTop - conH) < this.config.distanceBottom ){
-        //   //回调onPullUpLoad 函数，即满足刷新条件
-        //   // this.onPullUpLoad();
-        // }
-        // else{
-        //   //回调clearPullDownMove 函数，取消刷新动作
-        //   // this.clearPullDownMove();
-        // }
       }
     },
     onPullDownMove: function(startY, y){
@@ -181,31 +171,6 @@
         }, this));
       }
     },
-    onScroll: function(event){
-      // console.info("111");
-      // var scrollTop = this.container.scrollTop,
-      //   scrollH = this.container.scrollHeight,
-      //   conH = this.container === document.body ? document.documentElement.clientHeight : this.container.offsetHeight;
-      
-      // if(!this.hasMore || this.loaderState === STATS.loading){
-      //   return false;
-      // }
-      // // if((scrollH - scrollTop) < conH){
-      // //   this.setChange(0, STATS.loading);
-      // // }
-      // console.info(scrollH, scrollTop, conH)
-      // if ((scrollH - scrollTop - conH) < conH && typeof this.config.onLoadMore === "function") {
-      //   // console.info(this.state);
-      //   this.setChange(0, STATS.loading);
-      //   this.config.onLoadMore(bind(function(isNoMore){
-      //     this.setEndState();
-      //     if(isNoMore){
-      //       this.setNoMoreState();
-      //     }
-      //   }, this));
-      // }
-    },
-    // onPullUpLoad: function(){},
     // 拖拽的缓动公式 - easeOutSine
     easing: function(distance) {
       // t: current time, b: begInnIng value, c: change In value, d: duration
