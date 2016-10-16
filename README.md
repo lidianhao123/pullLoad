@@ -99,3 +99,6 @@ var installObj = new pullload({
 - distanceBottom 距离底部距离触发加载更多 默认值为100像素 
 - onRefresh  满足刷新动作回调函数，刷新的具体业务代码在此函数中进行，并且需要 success 或者 error
 - onLoadMore 满足加载更多回调函数，加载更多聚义业务代码在此函数中进行，并且需要 success 或者 error。无更多内容时请执行success(true);
+
+# License
+MIT
