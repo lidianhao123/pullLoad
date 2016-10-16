@@ -1,6 +1,8 @@
 # pullLoad
 移动端 html5 插件，实现下拉刷新，加载更多等功能，支持require.js
 
+react 版本 [react-pullLoad](https://github.com/react-ld/react-pullLoad)
+
 #### 示例
 http://lidianhao123.github.io/pullLoad/
 
