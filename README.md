@@ -4,7 +4,7 @@
 react 版本 [react-pullLoad](https://github.com/react-ld/react-pullLoad)
 
 #### 示例
-http://lidianhao123.github.io/pullLoad/
+https://lidianhao123.github.io/pullLoad/
 
 # 基本思路
 1. 不依赖第三方库
@@ -60,7 +60,7 @@ require(["zepto", "pullload"], function($, pullload) {})
 
 #### 创建 pullload 对象
 
-此示例代码为 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 中部分代码节选，详情可直接参考 [domo1](http://lidianhao123.github.io/pullLoad/index.html) 
+此示例代码为 [domo1](https://lidianhao123.github.io/pullLoad/index.html) 中部分代码节选，详情可直接参考 [domo1](https://lidianhao123.github.io/pullLoad/index.html) 
 ```js
 var installObj = new pullload({
   container: document.body,
